@@ -1,0 +1,29 @@
+{
+	"name": "gobl-utils-ts",
+	"version": "1.0.0",
+	"description": "Gobl typescript utilities.",
+	"main": "dist/gobl.js",
+	"typings": "types/gobl.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"gobl",
+		"ts"
+	],
+	"devDependencies": {
+		"typescript": "^3.6.3"
+	},
+	"files": [
+		"src",
+		"dist",
+		"types/*.d.ts"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/silassare/gobl-utils-ts.git"
+	},
+	"author": "Emile Silas Sare (emile.silas@gmail.com)",
+	"license": "MIT"
+}
