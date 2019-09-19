@@ -313,10 +313,7 @@ export abstract class GoblSinglePKEntity extends GoblEntity {
 	abstract singlePKValue(): string;
 }
 
-export const register = function<T extends GoblEntity>(
-	name: string,
-	entity: T
-) {
+export const register = function(name: string, entity: typeof GoblEntity) {
 	gobl[name] = entity;
 	gobl_cache[name] = {};
 	gobl_class_magic_map[(entity as any)['COLUMNS'].sort().join('')] = name;

@@ -95,7 +95,7 @@ export declare abstract class GoblEntity {
 export declare abstract class GoblSinglePKEntity extends GoblEntity {
     abstract singlePKValue(): string;
 }
-export declare const register: <T extends GoblEntity>(name: string, entity: T) => void;
+export declare const register: (name: string, entity: typeof GoblEntity) => void;
 export declare const getEntityCache: (entity_name: string) => tGoblCache<GoblEntity>;
 export declare const c_bool: (v: any) => boolean;
 export declare const c_int: (v: any) => number;
