@@ -1,7 +1,7 @@
 {
 	"name": "gobl-utils-ts",
 	"version": "1.0.0",
-	"description": "Gobl typescript utilities.",
+	"description": "Gobl typescript utilities for web app",
 	"main": "dist/gobl.js",
 	"typings": "types/gobl.d.ts",
 	"scripts": {
@@ -22,7 +22,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/silassare/gobl-utils-ts.git"
+		"url": "git+https://github.com/oliup-io/gobl-utils-ts.git"
 	},
 	"author": "Emile Silas Sare (emile.silas@gmail.com)",
 	"license": "MIT"

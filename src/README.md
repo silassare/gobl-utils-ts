@@ -1,6 +1,6 @@
 # About
 
-Gobl typescript utilities.
+Gobl typescript utilities for web app.
 
 # Notes
 
