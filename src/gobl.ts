@@ -3,16 +3,18 @@ export type tGoblEntityData = {
 };
 export type tGoblCache<T> = { [key: string]: T };
 
-const win: any = window,
-	gobl: any = (win.gobl = win.gobl || {}),
-	_hasOwn = Object.hasOwnProperty,
+const _hasOwn = Object.hasOwnProperty,
 	_isPlainObject = (a: any): boolean =>
 		Object.prototype.toString.call(a) === '[object Object]',
-	gobl_marker = '__gobl__',
+	win: any = window,
+	gobl: any = (win.gobl = win.gobl || {}),
 	gobl_cache: {
 		[entity: string]: tGoblCache<GoblEntity>;
-	} = {},
-	gobl_class_magic_map: { [key: string]: string } = {},
+	} = (gobl.gobl_cache = gobl.gobl_cache || {}),
+	gobl_class_magic_map: {
+		[key: string]: string;
+	} = (gobl.gobl_class_magic_map = gobl.gobl_class_magic_map || {}),
+	gobl_marker = '__gobl__',
 	realJSONParse = JSON.parse,
 	goblJSONParse = function(
 		text: any,
