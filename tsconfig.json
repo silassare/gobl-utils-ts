@@ -5,7 +5,7 @@
 		"module": "esnext",
 		"target": "esnext",
 		"inlineSources": true,
-		"inlineSourceMap": true,
+		"sourceMap": true,
 		"allowJs": false,
 		"strict": true,
 		"declaration": true,
