@@ -1,0 +1,1 @@
+{"version":3,"file":"GoblSinglePKEntity.js","sourceRoot":"","sources":["../src/GoblSinglePKEntity.ts"],"names":[],"mappings":"AAAA,OAAO,UAAU,MAAM,cAAc,CAAC;AAEtC,MAAM,CAAC,OAAO,OAAgB,kBAAmB,SAAQ,UAAU;CAElE","sourcesContent":["import GoblEntity from './GoblEntity';\n\nexport default abstract class GoblSinglePKEntity extends GoblEntity {\n\tabstract singlePKValue(): string;\n}\n"]}
