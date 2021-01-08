@@ -1,4 +1,4 @@
-import GoblEntity, { tGoblEntityData } from './GoblEntity';
+import GoblEntity, { GoblEntityData } from './GoblEntity';
 export declare const gobl: any, goblMarker = "__gobl__", goblCache: {
     [entity: string]: {
         [key: string]: GoblEntity;
@@ -12,7 +12,7 @@ export declare const gobl: any, goblMarker = "__gobl__", goblCache: {
  * @param data
  * @param cache
  */
-toInstance: (data: tGoblEntityData, cache?: boolean) => GoblEntity | undefined;
+toInstance: (data: GoblEntityData, cache?: boolean) => GoblEntity | undefined;
 export declare const register: (name: string, entity: typeof GoblEntity) => void;
 export declare const getEntityCache: (entityName: string) => {
     [key: string]: GoblEntity;

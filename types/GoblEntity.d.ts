@@ -1,4 +1,4 @@
-export declare type tGoblEntityData = {
+ export declare type GoblEntityData = {
     [key: string]: any;
 };
 /**
@@ -11,7 +11,7 @@ export default abstract class GoblEntity {
     protected readonly _data: any;
     protected _cache: any;
     protected _action: number;
-    protected constructor(_initialData: tGoblEntityData | undefined, _name: string, _prefix: string, _columns: string[]);
+    protected constructor(_initialData: GoblEntityData | undefined, _name: string, _prefix: string, _columns: string[]);
     /**
      * Magic setter.
      *
@@ -50,17 +50,17 @@ export default abstract class GoblEntity {
     /**
      * Hydrate the entity and set as saved when `save` is true
      */
-    doHydrate(data: tGoblEntityData, save?: boolean): this;
+    doHydrate(data: GoblEntityData, save?: boolean): this;
     /**
      * Returns current data in a clean new object
      *
      * if `diff` is true, returns modified columns only
      */
-    toObject(diff?: boolean): tGoblEntityData;
+    toObject(diff?: boolean): GoblEntityData;
     /**
      * Returns some column values
      */
-    toObjectSome(columns: string[]): tGoblEntityData;
+    toObjectSome(columns: string[]): GoblEntityData;
     /**
      * JSON helper
      */
@@ -71,6 +71,16 @@ export default abstract class GoblEntity {
      * `null` is returned when we can't have a valid cache key.
      */
     cacheKey(): string | null;
+    /**
+     * For backward compatibility
+     */
+    toInstance(data: GoblEntityData, cache?: boolean): GoblEntity | undefined;
+    /**
+     * For backward compatibility
+     */
+    subCache(entityName: string): {
+        [key: string]: GoblEntity;
+    };
     /**
      * Returns the primary keys of the entity.
      */
