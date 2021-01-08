@@ -1,6 +1,6 @@
-import { goblMarker } from './gobl';
+import { getEntityCache, goblMarker, toInstance } from './gobl';
 
-export type tGoblEntityData = {
+export type GoblEntityData = {
 	[key: string]: any;
 };
 
@@ -18,14 +18,14 @@ export default abstract class GoblEntity {
 	protected _action: number = ACTION_UNKNOWN;
 
 	protected constructor(
-		_initialData: tGoblEntityData = {},
+		_initialData: GoblEntityData = {},
 		private readonly _name: string,
 		private readonly _prefix: string,
 		private readonly _columns: string[],
 	) {
 		const ctx = this,
 			// we use null not undefined since JSON.stringify will ignore properties with undefined value
-			_def: null = null;
+			_def = null;
 
 		_columns.forEach(function (col) {
 			ctx._data[col] = ctx._cache[col] =
@@ -110,7 +110,7 @@ export default abstract class GoblEntity {
 	/**
 	 * Hydrate the entity and set as saved when `save` is true
 	 */
-	doHydrate(data: tGoblEntityData, save: boolean = false): this {
+	doHydrate(data: GoblEntityData, save = false): this {
 		const ctx = this,
 			sourceOfTruth = this._data;
 
@@ -132,7 +132,7 @@ export default abstract class GoblEntity {
 	 *
 	 * if `diff` is true, returns modified columns only
 	 */
-	toObject(diff: boolean = false): tGoblEntityData {
+	toObject(diff = false): GoblEntityData {
 		const o: any = {};
 
 		if (diff) {
@@ -158,7 +158,7 @@ export default abstract class GoblEntity {
 	/**
 	 * Returns some column values
 	 */
-	toObjectSome(columns: string[]): tGoblEntityData {
+	toObjectSome(columns: string[]): GoblEntityData {
 		const o: any = {},
 			len = columns.length;
 
@@ -209,6 +209,20 @@ export default abstract class GoblEntity {
 		}
 
 		return value || null;
+	}
+
+	/**
+	 * For backward compatibility
+	 */
+	toInstance(data: GoblEntityData, cache = false) {
+		return toInstance(data, cache);
+	}
+
+	/**
+	 * For backward compatibility
+	 */
+	subCache(entityName: string) {
+		return getEntityCache(entityName);
 	}
 
 	/**

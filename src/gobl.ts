@@ -1,4 +1,4 @@
-import GoblEntity, { tGoblEntityData } from './GoblEntity';
+import GoblEntity, { GoblEntityData } from './GoblEntity';
 
 const win: any = window;
 export const gobl: any = (win.gobl = win.gobl || {}),
@@ -16,7 +16,7 @@ export const gobl: any = (win.gobl = win.gobl || {}),
 	 * @param cache
 	 */
 	toInstance = function (
-		data: tGoblEntityData,
+		data: GoblEntityData,
 		cache = false,
 	): GoblEntity | undefined {
 		if (Object.prototype.toString.call(data) === '[object Object]') {
@@ -45,8 +45,7 @@ export const gobl: any = (win.gobl = win.gobl || {}),
 
 			if (entity) {
 				e = new entity(data);
-				// tslint:disable-next-line: no-conditional-assignment
-				if (true === cache && (cacheKey = e.cacheKey())) {
+				if (cache && (cacheKey = e.cacheKey())) {
 					old = goblCache[entityName][cacheKey];
 					if (old) {
 						e = old.doHydrate(data);
@@ -71,16 +70,13 @@ export const register = function (name: string, entity: typeof GoblEntity) {
 export const getEntityCache = (entityName: string) => goblCache[entityName];
 
 export const _bool = (v: any): boolean => {
-	// @ts-ignore
 	return v === null || v === undefined ? v : Boolean(v === '0' ? 0 : v);
 };
 
 export const _int = (v: any): number => {
-	// @ts-ignore
 	return v === null || v === undefined ? v : parseInt(v);
 };
 
 export const _string = (v: any): string => {
-	// @ts-ignore
 	return v === null || v === undefined ? '' : String(v);
 };
