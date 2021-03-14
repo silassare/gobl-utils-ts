@@ -1,4 +1,4 @@
- export declare type GoblEntityData = {
+export declare type GoblEntityData = {
     [key: string]: any;
 };
 /**
@@ -10,7 +10,7 @@ export default abstract class GoblEntity {
     private readonly _columns;
     protected readonly _data: any;
     protected _cache: any;
-    protected _action: number;
+    protected _state: number;
     protected constructor(_initialData: GoblEntityData | undefined, _name: string, _prefix: string, _columns: string[]);
     /**
      * Magic setter.
@@ -20,7 +20,7 @@ export default abstract class GoblEntity {
      */
     protected _set(column: string, value: any): this;
     /**
-     * Checks is the entity is clean.
+     * Checks if the entity is clean.
      */
     isClean(): boolean;
     /**
