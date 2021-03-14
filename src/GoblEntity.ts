@@ -4,10 +4,12 @@ export type GoblEntityData = {
 	[key: string]: any;
 };
 
-const ACTION_UNKNOWN = 0,
-	ACTION_SAVING = 1,
-	ACTION_DELETING = 2,
-	ACTION_UPDATING = 3;
+enum GoblEntityState {
+	UNKNOWN,
+	SAVING,
+	DELETING,
+	UPDATING,
+}
 
 /**
  * GoblEntity class.
@@ -15,7 +17,7 @@ const ACTION_UNKNOWN = 0,
 export default abstract class GoblEntity {
 	protected readonly _data: any = {};
 	protected _cache: any = {};
-	protected _action: number = ACTION_UNKNOWN;
+	protected _state: number = GoblEntityState.UNKNOWN;
 
 	protected constructor(
 		_initialData: GoblEntityData = {},
@@ -48,7 +50,7 @@ export default abstract class GoblEntity {
 	}
 
 	/**
-	 * Checks is the entity is clean.
+	 * Checks if the entity is clean.
 	 */
 	isClean(): boolean {
 		return Object.keys(this.toObject(true)).length === 0;
@@ -75,10 +77,12 @@ export default abstract class GoblEntity {
 	 */
 	isSaving(set?: boolean): boolean {
 		if (arguments.length) {
-			this._action = set ? ACTION_SAVING : ACTION_UNKNOWN;
+			this._state = set
+				? GoblEntityState.SAVING
+				: GoblEntityState.UNKNOWN;
 		}
 
-		return this._action === ACTION_SAVING;
+		return this._state === GoblEntityState.SAVING;
 	}
 
 	/**
@@ -88,10 +92,12 @@ export default abstract class GoblEntity {
 	 */
 	isDeleting(set?: boolean): boolean {
 		if (arguments.length) {
-			this._action = set ? ACTION_DELETING : ACTION_UNKNOWN;
+			this._state = set
+				? GoblEntityState.DELETING
+				: GoblEntityState.UNKNOWN;
 		}
 
-		return this._action === ACTION_DELETING;
+		return this._state === GoblEntityState.DELETING;
 	}
 
 	/**
@@ -101,10 +107,12 @@ export default abstract class GoblEntity {
 	 */
 	isUpdating(set?: boolean): boolean {
 		if (arguments.length) {
-			this._action = set ? ACTION_UPDATING : ACTION_UNKNOWN;
+			this._state = set
+				? GoblEntityState.UPDATING
+				: GoblEntityState.UNKNOWN;
 		}
 
-		return this._action === ACTION_UPDATING;
+		return this._state === GoblEntityState.UPDATING;
 	}
 
 	/**
