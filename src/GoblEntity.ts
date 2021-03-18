@@ -211,7 +211,7 @@ export default abstract class GoblEntity {
 			for (; i < len; i++) {
 				const v = this._data[columns[i]];
 				if (v != null) {
-					value += v;
+					value += '|' + v;
 				}
 			}
 		}
