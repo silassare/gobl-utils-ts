@@ -1,6 +1,12 @@
 export declare type GoblEntityData = {
     [key: string]: any;
 };
+declare enum GoblEntityState {
+    UNKNOWN = 0,
+    SAVING = 1,
+    DELETING = 2,
+    UPDATING = 3
+}
 /**
  * GoblEntity class.
  */
@@ -10,7 +16,7 @@ export default abstract class GoblEntity {
     private readonly _columns;
     protected readonly _data: any;
     protected _cache: any;
-    protected _state: number;
+    protected _state: GoblEntityState;
     protected constructor(_initialData: GoblEntityData | undefined, _name: string, _prefix: string, _columns: string[]);
     /**
      * Magic setter.
@@ -86,3 +92,4 @@ export default abstract class GoblEntity {
      */
     abstract identifierColumns(): string[];
 }
+export {};
