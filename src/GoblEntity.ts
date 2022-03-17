@@ -17,13 +17,13 @@ enum GoblEntityState {
 export default abstract class GoblEntity {
 	protected readonly _data: any = {};
 	protected _cache: any = {};
-	protected _state: number = GoblEntityState.UNKNOWN;
+	protected _state: GoblEntityState = GoblEntityState.UNKNOWN;
 
 	protected constructor(
 		_initialData: GoblEntityData = {},
 		private readonly _name: string,
 		private readonly _prefix: string,
-		private readonly _columns: string[],
+		private readonly _columns: string[]
 	) {
 		const ctx = this,
 			// we use null not undefined since JSON.stringify will ignore properties with undefined value
@@ -77,9 +77,7 @@ export default abstract class GoblEntity {
 	 */
 	isSaving(set?: boolean): boolean {
 		if (arguments.length) {
-			this._state = set
-				? GoblEntityState.SAVING
-				: GoblEntityState.UNKNOWN;
+			this._state = set ? GoblEntityState.SAVING : GoblEntityState.UNKNOWN;
 		}
 
 		return this._state === GoblEntityState.SAVING;
@@ -92,9 +90,7 @@ export default abstract class GoblEntity {
 	 */
 	isDeleting(set?: boolean): boolean {
 		if (arguments.length) {
-			this._state = set
-				? GoblEntityState.DELETING
-				: GoblEntityState.UNKNOWN;
+			this._state = set ? GoblEntityState.DELETING : GoblEntityState.UNKNOWN;
 		}
 
 		return this._state === GoblEntityState.DELETING;
@@ -107,9 +103,7 @@ export default abstract class GoblEntity {
 	 */
 	isUpdating(set?: boolean): boolean {
 		if (arguments.length) {
-			this._state = set
-				? GoblEntityState.UPDATING
-				: GoblEntityState.UNKNOWN;
+			this._state = set ? GoblEntityState.UPDATING : GoblEntityState.UNKNOWN;
 		}
 
 		return this._state === GoblEntityState.UPDATING;
@@ -175,9 +169,7 @@ export default abstract class GoblEntity {
 			if (Object.prototype.hasOwnProperty.call(this._data, col)) {
 				o[col] = this._data[col];
 			} else {
-				throw new Error(
-					`Column "${col}" is not defined in "${this._name}".`,
-				);
+				throw new Error(`Column "${col}" is not defined in "${this._name}".`);
 			}
 		}
 
