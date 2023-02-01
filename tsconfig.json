@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
-		"outDir": "dist/",
-		"moduleResolution": "node",
+		"outDir": "dist/esm",
 		"module": "esnext",
 		"target": "esnext",
 		"inlineSources": true,
@@ -11,7 +10,5 @@
 		"declaration": true,
 		"declarationDir": "types/"
 	},
-	"include": [
-		"src/**/*"
-	]
+	"include": ["src/**/*"]
 }
