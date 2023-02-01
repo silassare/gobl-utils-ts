@@ -1,11 +1,21 @@
 {
 	"name": "gobl-utils-ts",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Gobl typescript utilities for web app",
-	"main": "dist/index.js",
-	"typings": "types/index.d.ts",
+	"type": "module",
+	"main": "./dist/cjs/index.js",
+	"types": "./types/index.d.ts",
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"types": "./types/index.d.ts",
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		}
+	},
 	"scripts": {
-		"build": "npm run lint && tsc",
+		"build": "npm run lint && npm run build:tsc",
+		"build:tsc": "tsc --project tsconfig.json && tsc --project tsconfig.cjs.json",
 		"lint": "eslint --fix ./src",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
