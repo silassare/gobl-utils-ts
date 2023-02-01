@@ -1,14 +1,14 @@
-import GoblSinglePKEntity from './GoblSinglePKEntity';
-import GoblEntity from './GoblEntity';
+import GoblSinglePKEntity from './GoblSinglePKEntity.js';
+import GoblEntity from './GoblEntity.js';
 import { toInstance } from './gobl';
-export * from './gobl';
-export * from './GoblSinglePKEntity';
-export * from './GoblEntity';
+export * from './gobl.js';
+export * from './GoblSinglePKEntity.js';
+export * from './GoblEntity.js';
 
 const realJSONParse = JSON.parse,
 	goblJSONParse = function (
 		text: any,
-		reviver?: (key: any, value: any) => any,
+		reviver?: (key: any, value: any) => any
 	) {
 		return realJSONParse(text, function (key, value) {
 			if (typeof reviver === 'function') {

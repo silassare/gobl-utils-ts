@@ -1,4 +1,4 @@
-import { getEntityCache, goblMarker, toInstance } from './gobl';
+import { getEntityCache, goblMarker, toInstance } from './gobl.js';
 
 export type GoblEntityData = {
 	[key: string]: any;

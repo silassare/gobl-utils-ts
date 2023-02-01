@@ -1,4 +1,4 @@
-import GoblEntity, { GoblEntityData } from './GoblEntity';
+import GoblEntity, { GoblEntityData } from './GoblEntity.js';
 
 const win: any = window;
 export const gobl: any = (win.gobl = win.gobl || {}),
@@ -17,7 +17,7 @@ export const gobl: any = (win.gobl = win.gobl || {}),
 	 */
 	toInstance = function (
 		data: GoblEntityData,
-		cache = false,
+		cache = false
 	): GoblEntity | undefined {
 		if (Object.prototype.toString.call(data) === '[object Object]') {
 			let entityName = data[goblMarker],
