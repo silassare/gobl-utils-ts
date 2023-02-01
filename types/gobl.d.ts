@@ -1,4 +1,4 @@
-import GoblEntity, { GoblEntityData } from './GoblEntity';
+import GoblEntity, { GoblEntityData } from './GoblEntity.js';
 export declare const gobl: any, goblMarker = "__gobl__", goblCache: {
     [entity: string]: {
         [key: string]: GoblEntity;

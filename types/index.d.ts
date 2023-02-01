@@ -1,6 +1,6 @@
-import GoblSinglePKEntity from './GoblSinglePKEntity';
-import GoblEntity from './GoblEntity';
-export * from './gobl';
-export * from './GoblSinglePKEntity';
-export * from './GoblEntity';
+import GoblSinglePKEntity from './GoblSinglePKEntity.js';
+import GoblEntity from './GoblEntity.js';
+export * from './gobl.js';
+export * from './GoblSinglePKEntity.js';
+export * from './GoblEntity.js';
 export { GoblEntity, GoblSinglePKEntity };

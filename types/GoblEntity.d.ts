@@ -1,4 +1,4 @@
-export declare type GoblEntityData = {
+export type GoblEntityData = {
     [key: string]: any;
 };
 declare enum GoblEntityState {
