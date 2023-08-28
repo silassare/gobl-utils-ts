@@ -15,10 +15,10 @@ export const gobl: any = (win.gobl = win.gobl || {}),
 	 * @param data
 	 * @param cache
 	 */
-	toInstance = function (
+	toInstance = function <T extends GoblEntity = GoblEntity>(
 		data: GoblEntityData,
 		cache = false
-	): GoblEntity | undefined {
+	): T | undefined {
 		if (Object.prototype.toString.call(data) === '[object Object]') {
 			let entityName = data[goblMarker],
 				entity,
@@ -54,7 +54,7 @@ export const gobl: any = (win.gobl = win.gobl || {}),
 					goblCache[entityName][cacheKey] = e;
 				}
 
-				return e;
+				return e as T;
 			}
 		}
 

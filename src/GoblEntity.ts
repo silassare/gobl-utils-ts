@@ -215,7 +215,7 @@ export default abstract class GoblEntity {
 	 * For backward compatibility
 	 */
 	toInstance(data: GoblEntityData, cache = false) {
-		return toInstance(data, cache);
+		return toInstance<this>(data, cache);
 	}
 
 	/**
