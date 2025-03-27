@@ -29,7 +29,7 @@ export default abstract class GoblEntity {
 			// we use null not undefined since JSON.stringify will ignore properties with undefined value
 			_def = null;
 
-		_columns.forEach(function (col) {
+		this._columns.forEach(function (col) {
 			ctx._data[col] = ctx._cache[col] =
 				col in _initialData ? _initialData[col] : _def;
 		});

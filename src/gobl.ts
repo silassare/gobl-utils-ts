@@ -1,4 +1,4 @@
-import GoblEntity, { GoblEntityData } from './GoblEntity.js';
+import GoblEntity, { type GoblEntityData } from './GoblEntity.js';
 
 const win: any = window;
 export const gobl: any = (win.gobl = win.gobl || {}),

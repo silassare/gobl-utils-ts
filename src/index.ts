@@ -15,11 +15,9 @@ const realJSONParse = JSON.parse,
 				value = reviver(key, value);
 			}
 
-			if (Object.prototype.toString.call(value) === '[object Object]') {
-				const i = toInstance(value, true);
-				if (i) {
-					return i;
-				}
+			const i = toInstance(value, true);
+			if (i) {
+				return i;
 			}
 
 			return value;
