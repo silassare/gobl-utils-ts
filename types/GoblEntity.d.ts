@@ -80,7 +80,7 @@ export default abstract class GoblEntity {
     /**
      * For backward compatibility
      */
-    toInstance(data: GoblEntityData, cache?: boolean): GoblEntity | undefined;
+    toInstance(data: GoblEntityData, cache?: boolean): this | undefined;
     /**
      * For backward compatibility
      */
@@ -93,3 +93,4 @@ export default abstract class GoblEntity {
     abstract identifierColumns(): string[];
 }
 export {};
+//# sourceMappingURL=GoblEntity.d.ts.map
