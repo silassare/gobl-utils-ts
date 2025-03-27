@@ -1,14 +1,30 @@
 {
 	"compilerOptions": {
 		"outDir": "dist/esm",
-		"module": "esnext",
+		"declarationDir": "types/",
 		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"declaration": true,
+		"declarationMap": true,
 		"inlineSources": true,
 		"inlineSourceMap": true,
-		"allowJs": false,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"allowJs": true,
 		"strict": true,
-		"declaration": true,
-		"declarationDir": "types/"
+		"removeComments": false, // keep comment like /* @__PURE__ */  required for tree shaking to work as expected
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"preserveSymlinks": true
 	},
 	"include": ["src/**/*"]
 }

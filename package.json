@@ -1,6 +1,6 @@
 {
 	"name": "gobl-utils-ts",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Gobl typescript utilities for web app",
 	"type": "module",
 	"main": "./dist/cjs/index.js",
@@ -24,10 +24,12 @@
 		"ts"
 	],
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.15.0",
-		"@typescript-eslint/parser": "^5.15.0",
-		"eslint": "^8.11.0",
-		"typescript": "^4.6.2"
+		"@typescript-eslint/eslint-plugin": "^8.28.0",
+		"@typescript-eslint/parser": "^8.28.0",
+		"@eslint/js": "^9.23.0",
+		"eslint": "^9.23.0",
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.28.0"
 	},
 	"files": [
 		"src",
@@ -39,5 +41,6 @@
 		"url": "git+https://github.com/oliup-io/gobl-utils-ts.git"
 	},
 	"author": "Emile Silas Sare (emile.silas@gmail.com)",
-	"license": "MIT"
+	"license": "MIT",
+	"packageManager": "pnpm@10.6.1+sha512.40ee09af407fa9fbb5fbfb8e1cb40fbb74c0af0c3e10e9224d7b53c7658528615b2c92450e74cfad91e3a2dcafe3ce4050d80bda71d757756d2ce2b66213e9a3"
 }
