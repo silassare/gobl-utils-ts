@@ -1,6 +1,4 @@
-export type GoblEntityData = {
-    [key: string]: any;
-};
+import { type GoblEntityData } from './gobl.js';
 declare enum GoblEntityState {
     UNKNOWN = 0,
     SAVING = 1,
@@ -84,9 +82,7 @@ export default abstract class GoblEntity {
     /**
      * For backward compatibility
      */
-    subCache(entityName: string): {
-        [key: string]: GoblEntity;
-    };
+    subCache(entityName: string): Map<string, GoblEntity>;
     /**
      * Returns the primary keys of the entity.
      */
