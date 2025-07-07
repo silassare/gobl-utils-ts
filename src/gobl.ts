@@ -1,82 +1,101 @@
-import GoblEntity, { type GoblEntityData } from './GoblEntity.js';
+import GoblEntity from './GoblEntity.js';
 
-const win: any = window;
-export const gobl: any = (win.gobl = win.gobl || {}),
-	goblMarker = '__gobl__',
-	goblCache: {
-		[entity: string]: { [key: string]: GoblEntity };
-	} = (gobl.goblCache = gobl.goblCache || {}),
-	goblClassMagicMap: {
-		[key: string]: string;
-	} = (gobl.goblClassMagicMap = gobl.goblClassMagicMap || {}),
-	/**
-	 * Try to identify and instantiate the entity class that best matches the given data.
-	 *
-	 * @param data
-	 * @param cache
-	 */
-	toInstance = function <T extends GoblEntity = GoblEntity>(
-		data: GoblEntityData,
-		cache = false
-	): T | undefined {
-		if (Object.prototype.toString.call(data) === '[object Object]') {
-			let entityName = data[goblMarker],
-				entity,
-				magic,
-				old: GoblEntity,
-				e: GoblEntity,
-				cacheKey;
+export const GOBL_ENTITY_MARKER = '__gobl__';
+
+export type GoblEntityData = {
+	[key in typeof GOBL_ENTITY_MARKER]?: string;
+} & {
+	[key: string]: any;
+};
+
+const win: any = typeof window !== 'undefined' ? window : globalThis;
+const gobl: any = (win.gobl = win.gobl || {}),
+	goblCache: Map<string, Map<string, GoblEntity>> = (gobl.goblCache =
+		gobl.goblCache || new Map()),
+	goblClassMagicMap: Map<string, string> = (gobl.goblClassMagicMap =
+		gobl.goblClassMagicMap || new Map());
+
+/**
+ * Try to identify and instantiate the entity class that best matches the given data.
+ *
+ * @param data
+ * @param includeCache
+ */
+export const toInstance = function <T extends GoblEntity = GoblEntity>(
+	data: GoblEntityData,
+	addToCache = false
+): T | undefined {
+	if (Object.prototype.toString.call(data) === '[object Object]') {
+		let entityName: string | undefined = data[GOBL_ENTITY_MARKER],
+			entityCtor,
+			magicKey,
+			old: T | undefined,
+			e: T,
+			cacheKey;
+
+		if (entityName) {
+			entityCtor = gobl[entityName];
+		}
+
+		if (!entityCtor) {
+			// important: we remove the marker to keep only the columns as properties
+			delete data[GOBL_ENTITY_MARKER];
+
+			magicKey = makeEntityClassMagicKey(Object.keys(data));
+			entityName = goblClassMagicMap.get(magicKey);
 
 			if (entityName) {
-				entity = gobl[entityName];
-				// maybe the entity name change
-				// this is to have a clean object
-				delete data[goblMarker];
-			}
-
-			if (!entity) {
-				magic = Object.keys(data).sort().join('');
-				entityName = goblClassMagicMap[magic];
-
-				if (entityName) {
-					entity = gobl[entityName];
-				}
-			}
-
-			if (entity) {
-				e = new entity(data);
-				if (cache && (cacheKey = e.cacheKey())) {
-					old = goblCache[entityName][cacheKey];
-					if (old) {
-						e = old.doHydrate(data);
-					}
-
-					goblCache[entityName][cacheKey] = e;
-				}
-
-				return e as T;
+				entityCtor = gobl[entityName];
 			}
 		}
 
-		return undefined;
-	};
+		if (entityCtor) {
+			e = new entityCtor(data);
+			const cache =
+				addToCache && entityName ? getEntityCache<T>(entityName) : null;
 
-export const register = function (name: string, entity: typeof GoblEntity) {
+			if (cache && (cacheKey = e.cacheKey())) {
+				old = cache.get(cacheKey);
+				if (old) {
+					e = old.doHydrate(data);
+				}
+
+				cache.set(cacheKey, e);
+			}
+
+			return e as T;
+		}
+	}
+
+	return undefined;
+};
+
+const makeEntityClassMagicKey = (columns: string[]): string => {
+	return columns.sort().join('|');
+};
+
+export function register(name: string, entity: typeof GoblEntity) {
+	const columnsAsKey = makeEntityClassMagicKey((entity as any).COLUMNS);
+
 	gobl[name] = entity;
-	goblCache[name] = {};
-	goblClassMagicMap[(entity as any).COLUMNS.sort().join('')] = name;
-};
+	goblCache.set(name, new Map());
+	goblClassMagicMap.set(columnsAsKey, name);
+}
 
-export const getEntityCache = (entityName: string) => goblCache[entityName];
+export function getEntityCache<T extends GoblEntity = GoblEntity>(
+	entityName: string
+) {
+	return goblCache.get(entityName) as Map<string, T>;
+}
 
-export const _bool = (v: any): boolean => {
+export function _bool(v: any): boolean {
 	return v === null || v === undefined ? v : Boolean(v === '0' ? 0 : v);
-};
+}
 
-export const _int = (v: any): number => {
+export function _int(v: any): number {
 	return v === null || v === undefined ? v : parseInt(v);
-};
+}
 
-export const _string = (v: any): string => {
+export function _string(v: any): string {
 	return v === null || v === undefined ? '' : String(v);
-};
+}

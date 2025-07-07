@@ -1,8 +1,9 @@
-import { getEntityCache, goblMarker, toInstance } from './gobl.js';
-
-export type GoblEntityData = {
-	[key: string]: any;
-};
+import {
+	type GoblEntityData,
+	getEntityCache,
+	GOBL_ENTITY_MARKER,
+	toInstance,
+} from './gobl.js';
 
 enum GoblEntityState {
 	UNKNOWN,
@@ -135,24 +136,30 @@ export default abstract class GoblEntity {
 	 * if `diff` is true, returns modified columns only
 	 */
 	toObject(diff = false): GoblEntityData {
-		const o: any = {};
+		const o: GoblEntityData = {};
+		const hasOwn = Object.prototype.hasOwnProperty;
 
 		if (diff) {
-			for (const k in this._cache) {
-				if (Object.prototype.hasOwnProperty.call(this._cache, k)) {
-					if (this._cache[k] !== this._data[k]) {
-						o[k] = this._data[k];
-					}
+			for (const prop in this._cache) {
+				if (
+					prop !== GOBL_ENTITY_MARKER &&
+					hasOwn.call(this._cache, prop) &&
+					this._cache[prop] !== this._data[prop]
+				) {
+					o[prop] = this._data[prop];
 				}
 			}
 			return o;
 		}
 
-		for (const k in this._data) {
-			if (Object.prototype.hasOwnProperty.call(this._data, k)) {
-				o[k] = this._data[k];
+		for (const prop in this._data) {
+			if (hasOwn.call(this._data, prop)) {
+				o[prop] = this._data[prop];
 			}
 		}
+
+		// mark the object
+		o[GOBL_ENTITY_MARKER] = this._name;
 
 		return o;
 	}
@@ -180,10 +187,7 @@ export default abstract class GoblEntity {
 	 * JSON helper
 	 */
 	toJSON(): any {
-		const data = this.toObject();
-		data[goblMarker] = this._name;
-
-		return data;
+		return this.toObject();
 	}
 
 	/**
