@@ -1,6 +1,6 @@
 {
 	"name": "gobl-utils-ts",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Gobl typescript utilities for web app",
 	"type": "module",
 	"main": "./dist/cjs/index.js",
