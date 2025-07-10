@@ -13,7 +13,7 @@ export type GoblEntityData = {
  */
 export declare const toInstance: <T extends GoblEntity = GoblEntity>(data: GoblEntityData, addToCache?: boolean) => T | undefined;
 export declare function register(name: string, entity: typeof GoblEntity): void;
-export declare function getEntityCache<T extends GoblEntity = GoblEntity>(entityName: string): Map<string, T>;
+export declare function getEntityCache<T extends GoblEntity = GoblEntity>(entityName: string): Map<string, T> | undefined;
 export declare function _bool(v: any): boolean;
 export declare function _int(v: any): number;
 export declare function _string(v: any): string;

@@ -80,10 +80,6 @@ export default abstract class GoblEntity {
      */
     toInstance(data: GoblEntityData, cache?: boolean): this | undefined;
     /**
-     * For backward compatibility
-     */
-    subCache(entityName: string): Map<string, GoblEntity>;
-    /**
      * Returns the primary keys of the entity.
      */
     abstract identifierColumns(): string[];
