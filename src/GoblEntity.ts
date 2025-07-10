@@ -1,9 +1,4 @@
-import {
-	type GoblEntityData,
-	getEntityCache,
-	GOBL_ENTITY_MARKER,
-	toInstance,
-} from './gobl.js';
+import { type GoblEntityData, GOBL_ENTITY_MARKER, toInstance } from './gobl.js';
 
 enum GoblEntityState {
 	UNKNOWN,
@@ -220,13 +215,6 @@ export default abstract class GoblEntity {
 	 */
 	toInstance(data: GoblEntityData, cache = false) {
 		return toInstance<this>(data, cache);
-	}
-
-	/**
-	 * For backward compatibility
-	 */
-	subCache(entityName: string) {
-		return getEntityCache(entityName);
 	}
 
 	/**
