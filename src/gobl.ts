@@ -85,7 +85,7 @@ export function register(name: string, entity: typeof GoblEntity) {
 export function getEntityCache<T extends GoblEntity = GoblEntity>(
 	entityName: string
 ) {
-	return goblCache.get(entityName) as Map<string, T>;
+	return goblCache.get(entityName) as Map<string, T> | undefined;
 }
 
 export function _bool(v: any): boolean {
