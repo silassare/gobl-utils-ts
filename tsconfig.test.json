@@ -1,0 +1,19 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"declaration": false,
+		"declarationMap": false,
+		"declarationDir": null,
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"types": ["node"],
+		// pnpm links dependencies: resolving through the links is required
+		"preserveSymlinks": false,
+		"skipLibCheck": true,
+		// the generated entities import the package by name: resolve it to the sources under test
+		"paths": { "gobl-utils-ts": ["./src/index.ts"] }
+	},
+	"include": ["src/**/*", "tests/**/*.ts", "vitest.config.ts"],
+	"exclude": ["tests/integration/generator/vendor"]
+}

@@ -24,7 +24,9 @@
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"preserveSymlinks": true
+		"preserveSymlinks": true,
+		// a browser library: no ambient types from node_modules/@types (the tests add node's)
+		"types": []
 	},
 	"include": ["src/**/*"]
 }

@@ -1,0 +1,32 @@
+{
+	"repositories": {
+		"silassare/gobl": {
+			"type": "path",
+			"url": "/repos/gobl",
+			"options": {
+				"symlink": true
+			}
+		},
+		"silassare/blate": {
+			"type": "path",
+			"url": "/repos/blate",
+			"options": {
+				"symlink": true
+			}
+		},
+		"silassare/php-utils": {
+			"type": "path",
+			"url": "/repos/php-utils",
+			"options": {
+				"symlink": true
+			}
+		},
+		"oliup/code-generator": {
+			"type": "path",
+			"url": "/repos/code-generator",
+			"options": {
+				"symlink": true
+			}
+		}
+	}
+}

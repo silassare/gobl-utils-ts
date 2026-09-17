@@ -1,6 +1,6 @@
 {
 	"name": "gobl-utils-ts",
-	"version": "1.0.7",
+	"version": "2.0.0",
 	"description": "Gobl typescript utilities for web app",
 	"type": "module",
 	"main": "./dist/cjs/index.js",
@@ -16,20 +16,24 @@
 	"scripts": {
 		"build": "npm run lint && npm run build:tsc",
 		"build:tsc": "tsc --project tsconfig.json && tsc --project tsconfig.cjs.json",
-		"lint": "eslint --fix ./src",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"lint": "eslint ./src ./tests",
+		"type-check": "tsc --project tsconfig.test.json",
+		"test": "vitest run --project unit",
+		"test:integration": "vitest run --project integration"
 	},
 	"keywords": [
 		"gobl",
 		"ts"
 	],
 	"devDependencies": {
+		"@eslint/js": "^9.23.0",
+		"@types/node": "24.13.5",
 		"@typescript-eslint/eslint-plugin": "^8.28.0",
 		"@typescript-eslint/parser": "^8.28.0",
-		"@eslint/js": "^9.23.0",
 		"eslint": "^9.23.0",
 		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.28.0"
+		"typescript-eslint": "^8.28.0",
+		"vitest": "5.0.1"
 	},
 	"files": [
 		"src",

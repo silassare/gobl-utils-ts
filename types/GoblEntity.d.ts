@@ -70,9 +70,10 @@ export default abstract class GoblEntity {
      */
     toJSON(): any;
     /**
-     * Returns the entity cache key.
+     * Returns the entity cache key: the primary key as a string, or, for a composite primary key, the
+     * JSON array of its values as strings, in column name order.
      *
-     * `null` is returned when we can't have a valid cache key.
+     * `null` is returned when we can't have a valid cache key: a primary key value is missing.
      */
     cacheKey(): string | null;
     /**

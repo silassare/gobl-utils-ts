@@ -8,9 +8,19 @@ import tsEslint from 'typescript-eslint';
  */
 export default [
 	{
+		// global ignores: an object with `ignores` only (next to `files`, they apply to that object alone)
+		name: 'use/ignores',
+		ignores: [
+			'**/dist/**',
+			'**/dist-ssr/**',
+			'**/coverage/**',
+			'tests/integration/generated/**',
+			'tests/integration/generator/vendor/**',
+		],
+	},
+	{
 		name: 'use/files-to-lint',
 		files: ['**/*.{ts,mts,tsx,vue,js,mjs}'],
-		ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
 	},
 	...tsEslint.configs.recommended,
 	js.configs.recommended,

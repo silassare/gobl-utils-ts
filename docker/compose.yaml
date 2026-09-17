@@ -1,0 +1,40 @@
+# gobl-utils-ts's development and test services. Nothing is needed on the host but Docker.
+#
+# - node: pnpm, TypeScript, ESLint and Vitest.
+# - php: runs Gobl's TypeScript generator for the integration suite (tests/integration/generator/).
+#
+# Use it through the Makefile. The directory holding the first-party checkouts (oliup-suite's
+# `make clone`) is mounted at /repos: OZ_DEPS=local (default) resolves Gobl from it, OZ_DEPS=remote from
+# GitHub / Packagist (see docker/composer/).
+
+name: gobl-utils-ts-dev
+
+services:
+  node:
+    build:
+      context: ./node
+    image: gobl-utils-ts-dev-node:24
+    user: "${OZ_UID:-1000}:${OZ_GID:-1000}"
+    working_dir: /repos/gobl-utils-ts
+    volumes:
+      - ../..:/repos
+      - pnpm-store:/tmp/pnpm-store
+
+  php:
+    build:
+      context: ./php
+      args:
+        PHP_VERSION: ${OZ_PHP_VERSION:-8.4}
+    image: gobl-utils-ts-dev-php:${OZ_PHP_VERSION:-8.4}
+    user: "${OZ_UID:-1000}:${OZ_GID:-1000}"
+    working_dir: /repos/gobl-utils-ts/tests/integration/generator
+    volumes:
+      - ../..:/repos
+      - ./composer/${OZ_DEPS:-local}/config.json:/tmp/composer-home/config.json:ro
+      - composer-cache:/tmp/composer-cache
+    environment:
+      COMPOSER_HOME: /tmp/composer-home
+
+volumes:
+  pnpm-store:
+  composer-cache:

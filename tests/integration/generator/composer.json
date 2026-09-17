@@ -1,0 +1,16 @@
+{
+	"name": "gobl-utils-ts/generator",
+	"description": "Runs Gobl's TypeScript generator for gobl-utils-ts's integration suite.",
+	"type": "project",
+	"require": {
+		"php": ">=8.1",
+		"silassare/gobl": "^3.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"GoblUtilsTs\\Generator\\": "src/"
+		}
+	},
+	"prefer-stable": true,
+	"minimum-stability": "dev"
+}
