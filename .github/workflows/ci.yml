@@ -1,0 +1,21 @@
+# Runs what `make ci` runs, in Docker, with Gobl resolved from GitHub / Packagist (OZ_DEPS=remote):
+# lint, unit suite, then Gobl's real TypeScript generator and the integration suite and type-check on it.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # docker/compose.yaml mounts the checkout's parent at /repos: keep the repository's name
+          path: gobl-utils-ts
+
+      - name: make ci
+        working-directory: gobl-utils-ts
+        run: make docker-build ci OZ_DEPS=remote
