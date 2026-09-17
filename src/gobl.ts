@@ -38,10 +38,10 @@ export const toInstance = function <T extends GoblEntity = GoblEntity>(
 		}
 
 		if (!entityCtor) {
-			// important: we remove the marker to keep only the columns as properties
-			delete data[GOBL_ENTITY_MARKER];
-
-			magicKey = makeEntityClassMagicKey(Object.keys(data));
+			// the columns only, without the marker: the caller's data is left untouched
+			magicKey = makeEntityClassMagicKey(
+				Object.keys(data).filter((key) => key !== GOBL_ENTITY_MARKER)
+			);
 			entityName = goblClassMagicMap.get(magicKey);
 
 			if (entityName) {
@@ -70,8 +70,9 @@ export const toInstance = function <T extends GoblEntity = GoblEntity>(
 	return undefined;
 };
 
-const makeEntityClassMagicKey = (columns: string[]): string => {
-	return columns.sort().join('|');
+const makeEntityClassMagicKey = (columns: readonly string[]): string => {
+	// sorts a copy: the columns may be an entity class's own COLUMNS
+	return [...columns].sort().join('|');
 };
 
 export function register(name: string, entity: typeof GoblEntity) {
@@ -82,18 +83,41 @@ export function register(name: string, entity: typeof GoblEntity) {
 	goblClassMagicMap.set(columnsAsKey, name);
 }
 
+/**
+ * A reviver for `JSON.parse` that turns serialized entities (with the marker, or recognized from their
+ * columns) into instances of the registered entity classes, cached.
+ */
+export function goblJSONReviver(_key: string, value: any): any {
+	return toInstance(value, true) ?? value;
+}
+
+/**
+ * `JSON.parse` that revives entities ({@link goblJSONReviver}), after the given reviver if any.
+ */
+export function parseGoblJSON(text: string, reviver?: (key: string, value: any) => any): any {
+	return JSON.parse(text, function (key, value) {
+		return goblJSONReviver(key, reviver ? reviver.call(this, key, value) : value);
+	});
+}
+
 export function getEntityCache<T extends GoblEntity = GoblEntity>(
 	entityName: string
 ) {
 	return goblCache.get(entityName) as Map<string, T> | undefined;
 }
 
-export function _bool(v: any): boolean {
-	return v === null || v === undefined ? v : Boolean(v === '0' ? 0 : v);
+export function _bool(v: any): boolean | null {
+	return v === null || v === undefined ? null : Boolean(v === '0' ? 0 : v);
 }
 
-export function _int(v: any): number {
-	return v === null || v === undefined ? v : parseInt(v);
+export function _int(v: any): number | null {
+	if (v === null || v === undefined) {
+		return null;
+	}
+
+	const n = parseInt(v, 10);
+
+	return Number.isNaN(n) ? null : n;
 }
 
 export function _string(v: any): string {

@@ -186,28 +186,21 @@ export default abstract class GoblEntity {
 	}
 
 	/**
-	 * Returns the entity cache key.
+	 * Returns the entity cache key: the primary key as a string, or, for a composite primary key, the
+	 * JSON array of its values as strings, in column name order.
 	 *
-	 * `null` is returned when we can't have a valid cache key.
+	 * `null` is returned when we can't have a valid cache key: a primary key value is missing.
 	 */
 	cacheKey(): string | null {
-		const columns = this.identifierColumns().sort(),
-			len = columns.length;
-		let value = '',
-			i = 0;
+		const values = [...this.identifierColumns()].sort().map((column) => this._data[column]);
 
-		if (len === 1) {
-			value = this._data[columns[0]];
-		} else {
-			for (; i < len; i++) {
-				const v = this._data[columns[i]];
-				if (v != null) {
-					value += '|' + v;
-				}
-			}
+		if (!values.length || values.some((v) => v === null || v === undefined || v === '')) {
+			return null;
 		}
 
-		return value || null;
+		const keys = values.map(String);
+
+		return keys.length === 1 ? (keys[0] as string) : JSON.stringify(keys);
 	}
 
 	/**
