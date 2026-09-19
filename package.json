@@ -34,7 +34,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/oliup-io/gobl-utils-ts.git"
+		"url": "git+https://github.com/silassare/gobl-utils-ts.git"
 	},
 	"author": "Emile Silas Sare (emile.silas@gmail.com)",
 	"license": "MIT",
