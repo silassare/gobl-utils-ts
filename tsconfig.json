@@ -11,6 +11,10 @@
 		"esModuleInterop": true,
 		"allowJs": true,
 		"strict": true,
+		// The consumers compile these sources with their own settings, and oweb's are stricter than
+		// `strict`: what they check is checked here, so a consumer never meets an error of ours.
+		"noUncheckedIndexedAccess": true,
+		"exactOptionalPropertyTypes": true,
 		"removeComments": false, // keep comment like /* @__PURE__ */  required for tree shaking to work as expected
 		"noImplicitAny": true,
 		"strictNullChecks": true,

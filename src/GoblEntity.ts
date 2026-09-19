@@ -167,8 +167,14 @@ export default abstract class GoblEntity {
 			len = columns.length;
 
 		for (let i = 0; i < len; i++) {
+			// Indexing a list gives `string | undefined` under a consumer's stricter settings, and this
+			// package is consumed as source: the name is read once, checked once.
 			const col = columns[i];
-			if (Object.prototype.hasOwnProperty.call(this._data, col)) {
+
+			if (
+				undefined !== col &&
+				Object.prototype.hasOwnProperty.call(this._data, col)
+			) {
 				o[col] = this._data[col];
 			} else {
 				throw new Error(`Column "${col}" is not defined in "${this._name}".`);
