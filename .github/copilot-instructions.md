@@ -32,5 +32,12 @@ and the first-party siblings cloned next to this repository (oliup-suite's `make
   SQLite) into `tests/integration/generated/` (git-ignored), then the suite and `make type-check` use
   those files. `OZ_DEPS=local` (default) takes Gobl from the sibling checkout, working tree included;
   `remote` from GitHub / Packagist. The Gobl database is locked before generating, as OZone does.
+- **The package ships its TypeScript sources**: `exports`, `main` and `types` point at `src/index.ts`,
+  there is no build step, no `dist/` and no `types/`. One source of truth, nothing stale to publish, and
+  a consumer reads the real types. A consumer compiles TypeScript anyway (a bundler always does, Vite
+  included in dev), which is what makes this safe; the old oweb packages shipped sources too, but
+  pointed `types` at a committed `dist/index.d.ts`, and that is the stale build the audit caught
+  (audit 2.2). Declarations for a third party, if ever needed, are generated when publishing and never
+  committed.
 - `make type-check` uses `tsconfig.test.json` (sources, tests and generated entities); `tsconfig.json`
-  and `tsconfig.cjs.json` build `dist/` and `types/`, which are versioned for consumers of a tag.
+  is what the editors and the package itself read, and emits nothing.

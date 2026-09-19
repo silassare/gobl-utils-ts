@@ -62,6 +62,3 @@ lint:
 type-check:
 	$(NODE) pnpm type-check
 
-## Build dist/ and types/
-build:
-	$(NODE) pnpm build:tsc

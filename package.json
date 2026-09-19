@@ -3,19 +3,13 @@
 	"version": "2.0.0",
 	"description": "Gobl typescript utilities for web app",
 	"type": "module",
-	"main": "./dist/cjs/index.js",
-	"types": "./types/index.d.ts",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"exports": {
 		"./package.json": "./package.json",
-		".": {
-			"types": "./types/index.d.ts",
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
-		}
+		".": "./src/index.ts"
 	},
 	"scripts": {
-		"build": "npm run lint && npm run build:tsc",
-		"build:tsc": "tsc --project tsconfig.json && tsc --project tsconfig.cjs.json",
 		"lint": "eslint ./src ./tests",
 		"type-check": "tsc --project tsconfig.test.json",
 		"test": "vitest run --project unit",
@@ -36,9 +30,7 @@
 		"vitest": "5.0.1"
 	},
 	"files": [
-		"src",
-		"dist",
-		"types/*.d.ts"
+		"src"
 	],
 	"repository": {
 		"type": "git",

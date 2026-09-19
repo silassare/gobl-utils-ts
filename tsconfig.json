@@ -1,15 +1,12 @@
 {
 	"compilerOptions": {
-		"outDir": "dist/esm",
-		"declarationDir": "types/",
+		// The package ships its TypeScript sources, so nothing is emitted from here: this file is what
+		// `type-check` and the editors read.
+		"noEmit": true,
 		"target": "esnext",
 		"module": "esnext",
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
-		"declaration": true,
-		"declarationMap": true,
-		"inlineSources": true,
-		"inlineSourceMap": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
 		"allowJs": true,
