@@ -13,16 +13,9 @@ import { goblJSONReviver, parseGoblJSON } from 'gobl-utils-ts';
 const data = parseGoblJSON(text); // or JSON.parse(text, goblJSONReviver)
 ```
 
-# Changes in 2.0.0
+# Changes
 
--   Importing the package no longer replaces the global `JSON.parse`: use `parseGoblJSON()` or
-    `goblJSONReviver`.
--   `cacheKey()` is always a string: the primary key value (`0` included), or, for a composite primary key,
-    the JSON array of its values in column name order; `null` when a primary key value is missing.
--   `toInstance()` no longer removes the marker from the data it is given; `register()` no longer sorts the
-    entity class's `COLUMNS`.
--   `_bool()` returns `null` for `null` / `undefined`; `_int()` returns `null` for them and for what is not a
-    number.
+See [CHANGELOG.md](CHANGELOG.md).
 
 # Notes
 
