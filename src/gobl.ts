@@ -1,4 +1,4 @@
-import GoblEntity from './GoblEntity.js';
+import type { GoblEntity } from './GoblEntity.js';
 
 export const GOBL_ENTITY_MARKER = '__gobl__';
 
@@ -94,9 +94,15 @@ export function goblJSONReviver(_key: string, value: any): any {
 /**
  * `JSON.parse` that revives entities ({@link goblJSONReviver}), after the given reviver if any.
  */
-export function parseGoblJSON(text: string, reviver?: (key: string, value: any) => any): any {
+export function parseGoblJSON(
+	text: string,
+	reviver?: (key: string, value: any) => any
+): any {
 	return JSON.parse(text, function (key, value) {
-		return goblJSONReviver(key, reviver ? reviver.call(this, key, value) : value);
+		return goblJSONReviver(
+			key,
+			reviver ? reviver.call(this, key, value) : value
+		);
 	});
 }
 

@@ -10,7 +10,7 @@ enum GoblEntityState {
 /**
  * GoblEntity class.
  */
-export default abstract class GoblEntity {
+export abstract class GoblEntity {
 	protected readonly _data: any = {};
 	protected _cache: any = {};
 	protected _state: GoblEntityState = GoblEntityState.UNKNOWN;
@@ -198,9 +198,14 @@ export default abstract class GoblEntity {
 	 * `null` is returned when we can't have a valid cache key: a primary key value is missing.
 	 */
 	cacheKey(): string | null {
-		const values = [...this.identifierColumns()].sort().map((column) => this._data[column]);
+		const values = [...this.identifierColumns()]
+			.sort()
+			.map((column) => this._data[column]);
 
-		if (!values.length || values.some((v) => v === null || v === undefined || v === '')) {
+		if (
+			!values.length ||
+			values.some((v) => v === null || v === undefined || v === '')
+		) {
 			return null;
 		}
 
