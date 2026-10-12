@@ -10,8 +10,10 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"lint": "eslint ./src ./tests",
-		"type-check": "tsc --project tsconfig.test.json",
+		"lint": "eslint --cache --cache-location .cache/eslint/ ./src ./tests",
+		"lint:full": "eslint ./src ./tests",
+		"type-check": "tsc --project tsconfig.test.json --incremental --tsBuildInfoFile .cache/tsc/tsconfig.test.tsbuildinfo",
+		"type-check:full": "tsc --project tsconfig.test.json",
 		"test": "vitest run --project unit",
 		"test:integration": "vitest run --project integration"
 	},

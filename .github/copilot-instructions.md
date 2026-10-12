@@ -26,6 +26,22 @@ the other, and released together.
 Everything runs through `make`, in Docker (`##` comments in the `Makefile`); the host needs Docker, `make`,
 and the first-party siblings cloned next to this repository (oliup-suite's `make clone`).
 
+**Three tiers of re-running**, the cadence of every repository of the suite, with the same words
+everywhere (the `Makefile`'s own comments say what each one skips):
+
+- `make check` -- **every change**: `lint` and `type-check`, both reading what they left under
+  `.cache/` (ESLint's cache, and the `.tsbuildinfo` holding what `tsc` already checked).
+  `make check-full` is the same two with those caches ignored.
+- `make test FILE=... FILTER=...`, the same on `make test-integration`, and
+  `make test-integration GENERATE=no` to reuse the entities of the last run -- **a feature is done**.
+  A change to Gobl's templates or to the sample schema has to be regenerated to be tested at all.
+- `make test test-integration`, then `make ci` -- **end of a cycle, and before anything is handed
+  over**.
+
+The tiers are about re-running, never about writing: a feature's test is written with the feature.
+A failure in a narrowed run, or in one that skipped the generation, is repeated with the full target
+before it is believed or reported.
+
 - **Unit** (`make test`, `tests/unit/`): entities written the way the generator writes them.
 - **Integration** (`make test-integration`, `tests/integration/`): `make generate` runs Gobl's real
   generator (PHP container, `tests/integration/generator/generate.php`, a sample schema on in-memory
