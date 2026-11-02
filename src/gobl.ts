@@ -2,6 +2,16 @@ import type { GoblEntity } from './GoblEntity.js';
 
 export const GOBL_ENTITY_MARKER = '__gobl__';
 
+/**
+ * How many entities of one class the identity cache keeps, least recently used evicted first.
+ *
+ * The cache is on `window` and lives as long as the page: without a bound it held every row the
+ * application had ever revived, and nothing ever deleted an entry. A bound also keeps a stale read
+ * from outliving a long session -- a cached instance is merged with `doHydrate()`, so a column the
+ * server stopped sending kept its old value for as long as the entry lived.
+ */
+export const GOBL_CACHE_MAX_ENTRIES_PER_ENTITY = 500;
+
 export type GoblEntityData = {
 	[key in typeof GOBL_ENTITY_MARKER]?: string;
 } & {
@@ -60,7 +70,23 @@ export const toInstance = function <T extends GoblEntity = GoblEntity>(
 					e = old.doHydrate(data);
 				}
 
+				// Re-inserted rather than updated in place: a Map keeps insertion order, so
+				// deleting and setting makes this the most recently used and the eviction below
+				// takes the oldest. The cache lives on `window`, so without a bound an application
+				// paging through a list kept every row it had ever seen -- 50 rows a page, a
+				// thousand pages, 50 000 live entities no view references.
+				cache.delete(cacheKey);
 				cache.set(cacheKey, e);
+
+				while (cache.size > GOBL_CACHE_MAX_ENTRIES_PER_ENTITY) {
+					const oldest = cache.keys().next();
+
+					if (oldest.done) {
+						break;
+					}
+
+					cache.delete(oldest.value);
+				}
 			}
 
 			return e as T;
@@ -87,8 +113,12 @@ export function register(name: string, entity: typeof GoblEntity) {
  * A reviver for `JSON.parse` that turns serialized entities (with the marker, or recognized from their
  * columns) into instances of the registered entity classes, cached.
  */
-export function goblJSONReviver(_key: string, value: any): any {
-	return toInstance(value, true) ?? value;
+export function goblJSONReviver(
+	_key: string,
+	value: any,
+	addToCache = true
+): any {
+	return toInstance(value, addToCache) ?? value;
 }
 
 /**
@@ -96,12 +126,14 @@ export function goblJSONReviver(_key: string, value: any): any {
  */
 export function parseGoblJSON(
 	text: string,
-	reviver?: (key: string, value: any) => any
+	reviver?: (key: string, value: any) => any,
+	addToCache = true
 ): any {
 	return JSON.parse(text, function (key, value) {
 		return goblJSONReviver(
 			key,
-			reviver ? reviver.call(this, key, value) : value
+			reviver ? reviver.call(this, key, value) : value,
+			addToCache
 		);
 	});
 }

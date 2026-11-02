@@ -1,5 +1,25 @@
 ### Unreleased (2.1.x-dev)
 
+-   **The identity cache is bounded, and a caller may opt out of it.**
+    `goblCache` lives on `window` and lives as long as the page, and nothing
+    ever deleted an entry: `parseGoblJSON()` revived every object of every
+    answer into it with no way to say no, so an application paging through a
+    list retained every row it had ever seen -- fifty rows a page, a thousand
+    pages, fifty thousand live entities no view references, each one also a
+    stale read waiting to be merged into. It now keeps
+    `GOBL_CACHE_MAX_ENTRIES_PER_ENTITY` (500) per class, least recently used
+    evicted first -- reviving a row counts as using it, so a hot row stays --
+    and `parseGoblJSON()` / `goblJSONReviver()` take `addToCache`, which is
+    still `true` by default.
+
+-   **A cyclic entity graph raises the circular-structure error instead of
+    overflowing the stack.** `JSON.stringify` detects a cycle from what
+    `toJSON()` answers, and this answered a freshly built object every call, so
+    the same object was never seen twice and the detector never fired. A column
+    holding an entity is not something a server can send or a generated setter
+    takes -- it takes `doHydrate()` with hand-built data -- which is why this
+    went unnoticed.
+
 -   `GoblRowOf<E, P>`: the row of an entity, derived from it. An entity exposes
     its columns unprefixed (`name`) while a row carries them prefixed
     (`file_name`), which is what a REST answer and a form submission hold. What

@@ -21,6 +21,18 @@ the other, and released together.
 
 ---
 
+## Caches and cycles
+
+-   **The identity cache is bounded and opt-out.** `goblCache` is on `window`
+    and lives as long as the page, so it keeps
+    `GOBL_CACHE_MAX_ENTRIES_PER_ENTITY` per class, least recently used evicted
+    first; `parseGoblJSON()` and `goblJSONReviver()` take `addToCache`. A cache
+    with no bound kept every row an application had ever revived.
+-   **`toJSON()` refuses an entity that holds itself.** `JSON.stringify`'s own
+    cycle detector cannot help here: it compares what `toJSON()` answers, and
+    that is a new object every call. Anything else added that walks a graph of
+    entities needs its own `WeakSet`.
+
 ## Tests
 
 Everything runs through `make`, in Docker (`##` comments in the `Makefile`); the host needs Docker, `make`,

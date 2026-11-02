@@ -185,10 +185,58 @@ export abstract class GoblEntity {
 	}
 
 	/**
-	 * JSON helper
+	 * JSON helper.
+	 *
+	 * It walks what it holds itself, so `JSON.stringify` is never handed a live entity. Leaving that
+	 * to `stringify` cannot work: it calls `toJSON()` on each entity it reaches, one after another,
+	 * so by the time a cycle closes the first call has already returned -- its own cycle detector
+	 * compares the values it gets back, and this used to answer a freshly built object every call,
+	 * so the same object was never seen twice and a cyclic pair overflowed the stack. A column
+	 * holding an entity is not something a server can send or a generated setter takes; it takes
+	 * `doHydrate()` with hand-built data.
 	 */
 	toJSON(): any {
-		return this.toObject();
+		return GoblEntity.plain(this, new WeakSet());
+	}
+
+	/**
+	 * A value with no entity left in it, refusing one that holds itself.
+	 */
+	private static plain(value: unknown, seen: WeakSet<object>): unknown {
+		if (value instanceof GoblEntity) {
+			if (seen.has(value)) {
+				throw new TypeError(
+					`Converting circular structure to JSON: entity "${value._name}" holds itself, directly or through another entity.`
+				);
+			}
+
+			seen.add(value);
+
+			try {
+				const row = value.toObject();
+
+				for (const key of Object.keys(row)) {
+					row[key] = GoblEntity.plain(row[key], seen);
+				}
+
+				return row;
+			} finally {
+				// Left behind a sibling: the same entity twice side by side is not a cycle.
+				seen.delete(value);
+			}
+		}
+
+		if (Array.isArray(value)) {
+			return value.map((item) => GoblEntity.plain(item, seen));
+		}
+
+		if (value !== null && typeof value === 'object' && value.constructor === Object) {
+			return Object.fromEntries(
+				Object.entries(value).map(([key, one]) => [key, GoblEntity.plain(one, seen)])
+			);
+		}
+
+		return value;
 	}
 
 	/**

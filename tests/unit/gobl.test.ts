@@ -3,6 +3,7 @@ import {
 	_bool,
 	_int,
 	_string,
+	GOBL_CACHE_MAX_ENTRIES_PER_ENTITY,
 	getEntityCache,
 	GOBL_ENTITY_MARKER,
 	goblJSONReviver,
@@ -116,5 +117,68 @@ describe('value helpers', () => {
 		expect(_string(5)).toBe('5');
 		expect(_string(null)).toBe('');
 		expect(_string(undefined)).toBe('');
+	});
+});
+
+describe('the identity cache is bounded', () => {
+	it('keeps at most the configured number of entities per class, oldest first out', () => {
+		// The cache lives on `window` for as long as the page: without a bound an application
+		// paging through a list kept every row it had ever revived, and nothing deleted an entry.
+		const cache = getEntityCache<Article>('Article');
+
+		expect(cache).toBeDefined();
+
+		cache?.clear();
+
+		const total = GOBL_CACHE_MAX_ENTRIES_PER_ENTITY + 50;
+
+		for (let i = 1; i <= total; i++) {
+			toInstance<Article>(
+				{ [GOBL_ENTITY_MARKER]: 'Article', article_id: String(i) },
+				true
+			);
+		}
+
+		expect(cache?.size).toBe(GOBL_CACHE_MAX_ENTRIES_PER_ENTITY);
+
+		// The oldest went, the newest stayed.
+		expect(cache?.has('1')).toBe(false);
+		expect(cache?.has(String(total))).toBe(true);
+	});
+
+	it('counts a revived entity as freshly used, so a hot row is not evicted', () => {
+		const cache = getEntityCache<Article>('Article');
+
+		cache?.clear();
+
+		toInstance<Article>({ [GOBL_ENTITY_MARKER]: 'Article', article_id: 'hot' }, true);
+
+		for (let i = 1; i <= GOBL_CACHE_MAX_ENTRIES_PER_ENTITY - 1; i++) {
+			toInstance<Article>(
+				{ [GOBL_ENTITY_MARKER]: 'Article', article_id: `cold-${i}` },
+				true
+			);
+
+			// Read again, so it is the most recently used rather than the oldest.
+			toInstance<Article>({ [GOBL_ENTITY_MARKER]: 'Article', article_id: 'hot' }, true);
+		}
+
+		toInstance<Article>({ [GOBL_ENTITY_MARKER]: 'Article', article_id: 'last' }, true);
+
+		expect(cache?.has('hot')).toBe(true);
+	});
+
+	it('lets a caller revive without caching at all', () => {
+		const cache = getEntityCache<Article>('Article');
+
+		cache?.clear();
+
+		parseGoblJSON(
+			JSON.stringify({ [GOBL_ENTITY_MARKER]: 'Article', article_id: 'uncached' }),
+			undefined,
+			false
+		);
+
+		expect(cache?.size).toBe(0);
 	});
 });

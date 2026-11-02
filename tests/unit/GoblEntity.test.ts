@@ -97,3 +97,28 @@ describe('GoblEntity', () => {
 		);
 	});
 });
+
+describe('serialization of a cyclic graph', () => {
+	it('raises the circular-structure error instead of overflowing the stack', () => {
+		// `JSON.stringify` detects a cycle from the values `toJSON()` returns, and this used to
+		// answer a freshly built object every call -- so the same object was never seen twice and
+		// the detector never fired. A column holding an entity takes `doHydrate()` with hand-built
+		// data: a server cannot send it and a generated setter does not take it.
+		const a = new Article({ article_id: '1' });
+		const b = new Article({ article_id: '2' });
+
+		a.doHydrate({ article_title: b as never });
+		b.doHydrate({ article_title: a as never });
+
+		expect(() => JSON.stringify(a)).toThrowError(/circular structure/i);
+	});
+
+	it('still serializes an ordinary entity', () => {
+		const a = new Article({ article_id: '1', article_title: 'Hello' });
+
+		expect(JSON.parse(JSON.stringify(a))).toMatchObject({
+			article_id: '1',
+			article_title: 'Hello',
+		});
+	});
+});
