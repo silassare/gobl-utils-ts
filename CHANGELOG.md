@@ -1,4 +1,6 @@
-### Unreleased (2.1.x-dev)
+### Unreleased (2.2.x-dev)
+
+### v2.1.0 (2026-11-02)
 
 -   **The identity cache is bounded, and a caller may opt out of it.**
     `goblCache` lives on `window` and lives as long as the page, and nothing
