@@ -11,7 +11,7 @@
 		"esModuleInterop": true,
 		"allowJs": true,
 		"strict": true,
-		// The consumers compile these sources with their own settings, and oweb's are stricter than
+		// The consumers compile these sources with their own settings, which may be stricter than
 		// `strict`: what they check is checked here, so a consumer never meets an error of ours.
 		"noUncheckedIndexedAccess": true,
 		"exactOptionalPropertyTypes": true,

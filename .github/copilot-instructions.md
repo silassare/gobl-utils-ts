@@ -63,8 +63,8 @@ before it is believed or reported.
 - **The package ships its TypeScript sources**: `exports`, `main` and `types` point at `src/index.ts`,
   there is no build step, no `dist/` and no `types/`. One source of truth, nothing stale to publish, and
   a consumer reads the real types. A consumer compiles TypeScript anyway (a bundler always does, Vite
-  included in dev), which is what makes this safe; the old oweb packages shipped sources too, but
-  pointed `types` at a committed `dist/index.d.ts`, and that is the stale build the audit caught
+  included in dev), which is what makes this safe; a package shipping sources while pointing `types`
+  at a committed `dist/index.d.ts` is the stale build an audit caught
   (audit 2.2). Declarations for a third party, if ever needed, are generated when publishing and never
   committed.
 - `make type-check` uses `tsconfig.test.json` (sources, tests and generated entities); `tsconfig.json`
